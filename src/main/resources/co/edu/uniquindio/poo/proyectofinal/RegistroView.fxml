@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="450.0" stylesheets="@styles.css" styleClass="pane-background" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://fxml.com/fxml/1" fx:controller="co.edu.uniquindio.poo.proyectofinal.ViewController.RegistroViewController">
+    <children>
+        <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
+            <children>
+
+                <VBox alignment="CENTER" spacing="5.0">
+                    <children>
+                        <Label text="📝" style="-fx-font-size: 45px;" />
+                        <Label text="Crear Nueva Cuenta" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #58a6ff;" />
+                        <Label text="Regístrate para empezar a comprar tus entradas" style="-fx-text-fill: #8b949e; -fx-font-size: 12px;" />
+                    </children>
+                </VBox>
+
+                <Separator prefWidth="200.0" style="-fx-padding: 5 0;" />
+
+                <VBox spacing="12.0" prefWidth="370.0">
+                    <children>
+                        <VBox spacing="5.0">
+                            <Label text="Documento de Identidad / Cédula" style="-fx-text-fill: #c9d1d9;" />
+                            <TextField fx:id="txtCedula" promptText="Ej: 1094..." />
+                        </VBox>
+
+                        <VBox spacing="5.0">
+                            <Label text="Nombre Completo" style="-fx-text-fill: #c9d1d9;" />
+                            <TextField fx:id="txtNombre" promptText="Ej: Juan Pérez" />
+                        </VBox>
+
+                        <VBox spacing="5.0">
+                            <Label text="Correo Electrónico" style="-fx-text-fill: #c9d1d9;" />
+                            <TextField fx:id="txtCorreo" promptText="ejemplo@correo.com" />
+                        </VBox>
+
+                        <VBox spacing="5.0">
+                            <Label text="Contraseña segura" style="-fx-text-fill: #c9d1d9;" />
+                            <PasswordField fx:id="txtContrasena" promptText="Mínimo 4 caracteres" />
+                        </VBox>
+
+                        <VBox spacing="5.0">
+                            <Label text="Rol de Usuario" style="-fx-text-fill: #c9d1d9;" />
+                            <ComboBox fx:id="comboRol" prefWidth="370.0" style="-fx-background-color: white; -fx-background-radius: 4;" />
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <VBox spacing="12.0" alignment="CENTER" prefWidth="370.0" style="-fx-padding: 10 0 0 0;">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#registrarUsuario" text="🚀 Registrarme" prefHeight="40.0" prefWidth="370.0" style="-fx-background-color: #2ea043; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;" />
+
+                        <Button mnemonicParsing="false" onAction="#volverAlLogin" text="⬅️ Volver al Login" prefHeight="35.0" prefWidth="370.0" styleClass="button-secondary" />
+                    </children>
+                </VBox>
+
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

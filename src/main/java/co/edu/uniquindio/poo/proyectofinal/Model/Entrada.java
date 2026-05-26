@@ -1,77 +1,40 @@
 package co.edu.uniquindio.poo.proyectofinal.Model;
 
-public class Entrada {
-    private String idEntrada;
-    private EventoBuilder eventoBuilder;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public class Entrada implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private String idTicket;
+    private Evento evento;
+    private Zona zona;
     private Asiento asiento;
-    private double precioFinal;
+    private double precioPagado;
+    private LocalDateTime fechaCompra;
 
-    private EstadoEntrada estadoEntrada;
-
-    public Entrada(String idEntrada, EventoBuilder eventoBuilder, Asiento asiento, double precioFinal) {
-
-        this.idEntrada = idEntrada;
-        this.eventoBuilder = eventoBuilder;
+    public Entrada(Evento evento, Zona zona, Asiento asiento, double precioPagado) {
+        // Genera un código único de ticket (Ej: TKT-A1B2C)
+        this.idTicket = "TKT-" + UUID.randomUUID().toString().substring(0, 5).toUpperCase();
+        this.evento = evento;
+        this.zona = zona;
         this.asiento = asiento;
-        this.precioFinal = precioFinal;
-
-        estadoEntrada = EstadoEntrada.ACTIVA;
+        this.precioPagado = precioPagado;
+        this.fechaCompra = LocalDateTime.now();
     }
 
-    public boolean validarAcceso(){
+    // --- GETTERS ---
+    public String getIdTicket() { return idTicket; }
+    public Evento getEvento() { return evento; }
+    public Zona getZona() { return zona; }
+    public Asiento getAsiento() { return asiento; }
+    public double getPrecioPagado() { return precioPagado; }
 
-        return estadoEntrada == EstadoEntrada.ACTIVA;
-    }
-
-    public void anularEntrada(){
-
-        estadoEntrada = EstadoEntrada.ANULADA;
-    }
-    public double calcularPrecioFinal(){
-
-        return asiento.getZona().getTarifa().calcularPrecioFinal();
-    }
-  /// GET y SET
-
-    public String getIdEntrada() {
-        return idEntrada;
-    }
-
-    public void setIdEntrada(String idEntrada) {
-        this.idEntrada = idEntrada;
-    }
-
-    public EventoBuilder getEvento() {
-        return eventoBuilder;
-    }
-
-    public void setEvento(EventoBuilder eventoBuilder) {
-        this.eventoBuilder = eventoBuilder;
-    }
-
-    public Asiento getAsiento() {
-        return asiento;
-    }
-
-    public void setAsiento(Asiento asiento) {
-        this.asiento = asiento;
-    }
-
+    // 🎯 NUEVO ALIAS: Resuelve el error de compilación en la clase Compra
     public double getPrecioFinal() {
-        return precioFinal;
+        return precioPagado;
     }
 
-    public void setPrecioFinal(double precioFinal) {
-        this.precioFinal = precioFinal;
-    }
-
-    public EstadoEntrada getEstadoEntrada() {
-        return estadoEntrada;
-    }
-
-    public void setEstadoEntrada(EstadoEntrada estadoEntrada) {
-        this.estadoEntrada = estadoEntrada;
-    }
-
-
+    public LocalDateTime getFechaCompra() { return fechaCompra; }
 }

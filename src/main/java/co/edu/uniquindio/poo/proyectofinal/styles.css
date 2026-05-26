@@ -1,0 +1,105 @@
+/* ==========================================
+   🏛️ ESTILOS CENTRALIZADOS MODO CLARO CORPORATIVO
+   ========================================== */
+
+/* Fondo general de la App */
+.pane-background {
+    -fx-background-color: #f5f7fa;
+}
+
+/* Botones laterales del Menú */
+.button-sidebar {
+    -fx-background-color: transparent;
+    -fx-text-fill: #434343;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 6px;
+}
+.button-sidebar:hover {
+    -fx-background-color: #e6f7ff;
+    -fx-text-fill: #1890ff;
+}
+
+/* Estilo Base de las Tarjetas Dashboard (Modo Claro) */
+.card-metrica {
+    -fx-border-width: 1px 1px 1px 5px !important; /* Borde izquierdo más grueso para el color */
+    -fx-border-radius: 6px !important;
+    -fx-background-radius: 6px !important;
+    -fx-padding: 20px !important;
+    -fx-alignment: CENTER_LEFT !important;
+    -fx-spacing: 12px !important;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 8, 0, 0, 3);
+}
+
+/* Títulos pequeños arriba de los números (Negrita y Gris Oscuro) */
+.label-titulo-metrica {
+    -fx-text-fill: #262626 !important;
+    -fx-font-size: 13px !important;
+    -fx-font-weight: bold !important;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Números Gigantes de las Tarjetas (Súper legibles) */
+.label-valor-metrica {
+    -fx-text-fill: #000000 !important;
+    -fx-font-size: 34px !important;
+    -fx-font-weight: bold !important;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* --- Variaciones de color para cada tarjeta --- */
+.card-clientes-claro {
+    -fx-background-color: #ffffff !important;
+    -fx-border-color: #e8e8e8 #e8e8e8 #e8e8e8 #1890ff !important; /* Borde Izquierdo Azul */
+}
+
+.card-eventos-claro {
+    -fx-background-color: #ffffff !important;
+    -fx-border-color: #e8e8e8 #e8e8e8 #e8e8e8 #fa8c16 !important; /* Borde Izquierdo Naranja */
+}
+
+.card-entradas-claro {
+    -fx-background-color: #ffffff !important;
+    -fx-border-color: #e8e8e8 #e8e8e8 #e8e8e8 #52c41a !important; /* Borde Izquierdo Verde */
+}
+
+/* Tarjeta destacada de Ingresos (Completamente Azul para llamar la atención) */
+.card-ingresos-claro {
+    -fx-background-color: #1890ff !important;
+    -fx-border-color: #1890ff !important;
+}
+/* Forzar texto blanco en la tarjeta de ingresos ya que su fondo es azul */
+.card-ingresos-claro .label-titulo-metrica {
+    -fx-text-fill: #ffffff !important;
+}
+.card-ingresos-claro .label-valor-metrica {
+    -fx-text-fill: #ffffff !important;
+}
+
+/* ==========================================
+   📊 TUNING DEL GRAFICO (PIECHART)
+   ========================================== */
+.chart-title {
+    -fx-text-fill: #001529 !important;
+    -fx-font-size: 16px !important;
+    -fx-font-weight: bold !important;
+}
+
+.chart-pie-label {
+    -fx-fill: #434343 !important;
+    -fx-font-size: 13px !important;
+    -fx-font-weight: bold !important;
+}
+
+.chart-legend {
+    -fx-background-color: #ffffff !important;
+    -fx-border-color: #f0f0f0 !important;
+    -fx-border-radius: 4px;
+    -fx-padding: 8px;
+}
+
+.chart-legend-item {
+    -fx-text-fill: #262626 !important;
+    -fx-font-size: 13px !important;
+}

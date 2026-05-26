@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane prefHeight="650.0" prefWidth="1000.0" stylesheets="@styles.css" styleClass="pane-background" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://fxml.com/fxml/1" fx:controller="co.edu.uniquindio.poo.proyectofinal.ViewController.CompraViewController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="70.0" style="-fx-background-color: #161b22; -fx-padding: 0 30; -fx-border-color: #30363d; -fx-border-width: 0 0 1 0;" spacing="20.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="🎟️ Nexus Tickets" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #58a6ff;" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="lblSaludoUsuario" text="Sesión activa: Cliente" style="-fx-text-fill: #c9d1d9; -fx-font-weight: bold;" />
+                <Button mnemonicParsing="false" onAction="#verMisCompras" text="📋 Mis Compras" styleClass="button-secondary" />
+                <Button mnemonicParsing="false" onAction="#cerrarSesion" text="🚪 Salir" style="-fx-background-color: #da3637;" />
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox style="-fx-padding: 30;" spacing="20.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Cartelera de Eventos" styleClass="label-title" />
+
+                <HBox spacing="15.0" alignment="CENTER_LEFT" style="-fx-background-color: #0d1117; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #30363d; -fx-border-radius: 8;">
+                    <children>
+                        <Label text="🔍 Buscar:" style="-fx-text-fill: #c9d1d9;" />
+                        <TextField fx:id="txtBuscarEvento" promptText="Nombre del evento o ciudad..." prefWidth="300.0" />
+
+                        <Region HBox.hgrow="ALWAYS" />
+
+                        <Label text="🏷️ Categoría:" style="-fx-text-fill: #c9d1d9;" />
+                        <ComboBox fx:id="comboCategoria" prefWidth="180.0" promptText="Todas las categorías" />
+
+                        <Button mnemonicParsing="false" onAction="#limpiarFiltros" text="✖️ Limpiar" styleClass="button-secondary" />
+                    </children>
+                </HBox>
+
+                <TableView fx:id="tablaEventosCliente" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colNombre" text="Nombre del Evento" prefWidth="250.0" />
+                        <TableColumn fx:id="colDescripcion" text="Descripción / Tipo" prefWidth="300.0" />
+                        <TableColumn fx:id="colCiudad" text="Ciudad" prefWidth="150.0" />
+                        <TableColumn fx:id="colFecha" text="Fecha y Hora" prefWidth="180.0" />
+                    </columns>
+                </TableView>
+
+                <HBox alignment="CENTER_RIGHT">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#verDetalleEvento" text="🎟️ Ver Detalles y Comprar Asientos" prefHeight="40.0" style="-fx-background-color: #2ea043; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

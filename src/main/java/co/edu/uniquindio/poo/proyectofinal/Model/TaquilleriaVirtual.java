@@ -5,93 +5,89 @@ import java.util.List;
 
 public class TaquilleriaVirtual {
 
+    private static volatile TaquilleriaVirtual instance;
 
-        private static TaquilleriaVirtual instance;
+    // Listas globales del sistema
+    private List<Usuario> usuarios;
+    private List<Evento> eventos; // 🔥 Corregido: Ahora almacena el Producto real (Evento)
+    private List<Compra> compras;
+    private List<Incidencia> incidencias;
 
-        private List<Usuario> usuarios;
-
-        private List<EventoBuilder> eventoBuilders;
-
-        private List<Compra> compras;
-
-        private List<Incidencia> incidencias;
-
-        private TaquilleriaVirtual() {
-
-            usuarios = new ArrayList<>();
-            eventoBuilders = new ArrayList<>();
-            compras = new ArrayList<>();
-            incidencias = new ArrayList<>();
-        }
-
-        /**
-         * Metodo que permite obtener la unica instancia de la clase notificacion
-         * @return instancia
-         */
-        public static TaquilleriaVirtual getInstance() {
-            if (instance == null) {
-                instance = new TaquilleriaVirtual();
-            }
-            return instance;
-        }
-/// METODOS DEL PATRON FACADE
-        public void agregarUsuario(Usuario usuario) {
-
-            usuarios.add(usuario);
-        }
-
-        public void agregarEvento(EventoBuilder eventoBuilder) {
-
-            eventoBuilders.add(eventoBuilder);
-        }
-
-        public void agregarCompra(Compra compra) {
-
-            compras.add(compra);
-        }
-
-        public void agregarIncidencia(Incidencia incidencia) {
-
-            incidencias.add(incidencia);
-        }
-
-        /// GETS Y SETS
-
-    public static void setInstance(TaquilleriaVirtual instance) {
-        TaquilleriaVirtual.instance = instance;
+    // Constructor privado del Singleton
+    private TaquilleriaVirtual() {
+        usuarios = new ArrayList<>();
+        eventos = new ArrayList<>(); // 🔥 Inicializado correctamente
+        compras = new ArrayList<>();
+        incidencias = new ArrayList<>();
     }
+
+    /**
+     * Retorna la instancia única del sistema aplicando Double-Checked Locking (Seguro para hilos).
+     */
+    public static TaquilleriaVirtual getInstance() {
+        if (instance == null) {
+            synchronized (TaquilleriaVirtual.class) {
+                if (instance == null) {
+                    instance = new TaquilleriaVirtual();
+                }
+            }
+        }
+        return instance;
+    }
+
+    // --- MÉTODOS DE ADICIÓN SEGUROS ---
+
+    public void agregarUsuario(Usuario usuario) {
+        if (usuario != null) usuarios.add(usuario);
+    }
+
+    public void agregarEvento(Evento evento) { // 🔥 Corregido el parámetro a Evento
+        if (evento != null) eventos.add(evento);
+    }
+
+    public void agregarCompra(Compra compra) {
+        if (compra != null) compras.add(compra);
+    }
+
+    public void agregarIncidencia(Incidencia incidencia) {
+        if (incidencia != null) incidencias.add(incidencia);
+    }
+
+    // --- GETTERS Y SETTERS PROTEGIDOS (Fundamentales para la estabilidad de JavaFX) ---
 
     public List<Usuario> getUsuarios() {
         return usuarios;
     }
 
-    public void setUsuarios(List<Usuario> usuarios) {
-        this.usuarios = usuarios;
-    }
-
-    public List<EventoBuilder> getEventos() {
-        return eventoBuilders;
-    }
-
-    public void setEventos(List<EventoBuilder> eventoBuilders) {
-        this.eventoBuilders = eventoBuilders;
+    /**
+     * 🔥 Devuelve la lista de eventos reales para mapear directamente en las TableView.
+     */
+    public List<Evento> getEventos() {
+        return eventos;
     }
 
     public List<Compra> getCompras() {
         return compras;
     }
 
-    public void setCompras(List<Compra> compras) {
-        this.compras = compras;
-    }
-
     public List<Incidencia> getIncidencias() {
         return incidencias;
     }
 
-    public void setIncidencias(List<Incidencia> incidencias) {
-        this.incidencias = incidencias;
+    // Métodos de asignación segura en bloque por si cargas datos desde archivos
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = (usuarios != null) ? usuarios : new ArrayList<>();
     }
 
+    public void setEventos(List<Evento> eventos) {
+        this.eventos = (eventos != null) ? eventos : new ArrayList<>();
+    }
 
+    public void setCompras(List<Compra> compras) {
+        this.compras = (compras != null) ? compras : new ArrayList<>();
+    }
+
+    public void setIncidencias(List<Incidencia> incidencias) {
+        this.incidencias = (incidencias != null) ? incidencias : new ArrayList<>();
+    }
 }

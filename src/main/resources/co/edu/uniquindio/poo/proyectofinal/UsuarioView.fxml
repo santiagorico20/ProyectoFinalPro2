@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" spacing="15.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.poo.proyectofinal.ViewController.UsuarioViewController"
+      style="-fx-padding: 30; -fx-background-color: #ffffff;">
+
+    <Label text="Mi Perfil de Cuenta" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+    <Separator/>
+
+    <GridPane hgap="15.0" vgap="15.0" alignment="CENTER">
+        <children>
+            <Label text="ID Usuario:" style="-fx-text-fill: #777;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Label fx:id="lblIdUsuario" text="-" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="Nombre:" style="-fx-text-fill: #777;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Label fx:id="lblNombreUsuario" text="-" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="Correo Electrónico:" style="-fx-text-fill: #777;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <Label fx:id="lblCorreoUsuario" text="-" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Label text="Teléfono Celular:" style="-fx-text-fill: #777;" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <Label fx:id="lblTelefonoUsuario" text="-" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        </children>
+    </GridPane>
+</VBox>

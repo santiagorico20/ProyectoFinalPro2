@@ -1,72 +1,47 @@
 package co.edu.uniquindio.poo.proyectofinal.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recinto {
+/**
+ * ENTIDAD: El lugar físico que aloja el evento y contiene múltiples zonas.
+ */
+public class Recinto implements Serializable {
     private String idRecinto;
     private String nombre;
     private String direccion;
-    private int capacidadMaxima;
-    private List<Zona> ListZonas;
+    private String ciudad;
+    private List<Zona> zonas; // Lista de zonas asociadas (Composición)
 
-    public Recinto(String idRecinto, String nombre, String direccion, int capacidadMaxima) {
+    public Recinto(String idRecinto, String nombre, String direccion, String ciudad) {
         this.idRecinto = idRecinto;
         this.nombre = nombre;
         this.direccion = direccion;
-        this.capacidadMaxima = capacidadMaxima;
-
-        ListZonas = new ArrayList<>();
+        this.ciudad = ciudad;
+        this.zonas = new ArrayList<>();
     }
 
-    public void agregarZona(Zona zona){
-
-        ListZonas.add(zona);
+    public void agregarZona(Zona zona) {
+        this.zonas.add(zona);
     }
 
-    public int consultarCapacidad(){
-
-        return capacidadMaxima;
+    public void eliminarZona(Zona zona) {
+        this.zonas.remove(zona);
     }
 
-/// GETS Y SETS
-    public String getIdRecinto() {
-        return idRecinto;
-    }
+    // --- GETTERS Y SETTERS ---
+    public String getIdRecinto() { return idRecinto; }
+    public void setIdRecinto(String idRecinto) { this.idRecinto = idRecinto; }
 
-    public void setIdRecinto(String idRecinto) {
-        this.idRecinto = idRecinto;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public String getCiudad() { return ciudad; }
+    public void setCiudad(String ciudad) { this.ciudad = ciudad; }
 
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public int getCapacidadMaxima() {
-        return capacidadMaxima;
-    }
-
-    public void setCapacidadMaxima(int capacidadMaxima) {
-        this.capacidadMaxima = capacidadMaxima;
-    }
-
-    public List<Zona> getListZonas() {
-        return ListZonas;
-    }
-
-    public void setListZonas(List<Zona> listZonas) {
-        ListZonas = listZonas;
-    }
+    public List<Zona> getZonas() { return zonas; }
 }

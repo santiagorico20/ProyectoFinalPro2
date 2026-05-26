@@ -1,94 +1,34 @@
 package co.edu.uniquindio.poo.proyectofinal.Model;
 
-import co.edu.uniquindio.poo.proyectofinal.Model.State.AsientoDisponible;
-import co.edu.uniquindio.poo.proyectofinal.Model.State.AsientoReservado;
-import co.edu.uniquindio.poo.proyectofinal.Model.State.AsientoVendido;
-import co.edu.uniquindio.poo.proyectofinal.Model.State.IEstadoAsientoState;
+import java.io.Serializable;
 
-public class Asiento {
-    private String idAsiento;
-    private String fila;
+/**
+ * ENTIDAD: Representa un asiento físico en una zona numerada.
+ */
+public class Asiento implements Serializable {
+    private String codigo; // Ej: "A-12"
+    private int fila;
     private int numero;
+    private EstadoAsiento estado;
 
-    private IEstadoAsientoState estadoActual;
-    private Zona zona;
-
-    public Asiento(String idAsiento, String fila, int numero,Zona zona) {
-
-        this.idAsiento = idAsiento;
+    public Asiento(int fila, int numero) {
         this.fila = fila;
         this.numero = numero;
-        this.zona = zona;
-
-        estadoActual = new AsientoDisponible();
+        this.codigo = "F" + fila + "-N" + numero;
+        this.estado = new EstadoAsientoDisponible(); // Todos nacen libres
     }
 
-    public void reservar(){
+    // --- ACCIONES DEL STATE ---
+    public void reservar() { estado.reservar(this); }
+    public void ocupar() { estado.ocupar(this); }
+    public void liberar() { estado.liberar(this); }
 
-        estadoActual.reservar();
+    // --- GETTERS Y SETTERS ---
+    public String getCodigo() { return codigo; }
+    public int getFila() { return fila; }
+    public int getNumero() { return numero; }
+    public EstadoAsiento getEstado() { return estado; }
+    public void setEstado(EstadoAsiento estado) { this.estado = estado; }
 
-        estadoActual = new AsientoReservado();
-    }
-
-    public void vender(){
-
-        estadoActual.vender();
-
-        estadoActual = new AsientoVendido();
-    }
-
-    public void liberar(){
-
-        estadoActual.liberar();
-
-        estadoActual = new AsientoDisponible();
-    }
-
-    public void cambiarEstado(IEstadoAsientoState nuevoEstado){
-
-        estadoActual = nuevoEstado;
-    }
-/// GETS Y SETS
-    public String getIdAsiento() {
-        return idAsiento;
-    }
-
-    public void setIdAsiento(String idAsiento) {
-        this.idAsiento = idAsiento;
-    }
-
-    public String getFila() {
-        return fila;
-    }
-
-    public void setFila(String fila) {
-        this.fila = fila;
-    }
-
-    public int getNumero() {
-        return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
-    public IEstadoAsientoState getEstadoActual() {
-        return estadoActual;
-    }
-
-    public void setEstadoActual(IEstadoAsientoState estadoActual) {
-        this.estadoActual = estadoActual;
-    }
-
-    public Zona getZona() {
-        return zona;
-    }
-
-    public void setZona(Zona zona) {
-        this.zona = zona;
-    }
-
-
-
+    public String getNombreEstado() { return estado.getNombreEstado(); }
 }
