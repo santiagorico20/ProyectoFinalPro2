@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #0d1117;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://fxml.com/fxml/1" fx:controller="co.edu.uniquindio.poo.proyectofinal.ViewController.VerIncidenciasAdminViewController">
+    <children>
+        <VBox spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <children>
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <Label text="🛠️ Gestión de Incidencias (Admin)" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #58a6ff;" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button onAction="#regresar" text="⬅ Volver" prefHeight="35.0" style="-fx-background-color: #21262d; -fx-text-fill: #c9d1d9; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-cursor: hand;" />
+                    </children>
+                </HBox>
+
+                <ListView fx:id="listViewIncidencias" style="-fx-background-color: #161b22; -fx-control-inner-background: #161b22; -fx-text-fill: white; -fx-border-color: #30363d;" VBox.vgrow="ALWAYS" />
+
+                <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                    <children>
+                        <Button onAction="#marcarComoResuelta" text="✅ Marcar como Resuelta" prefHeight="40.0" style="-fx-background-color: #2ea043; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 6; -fx-background-radius: 6; -fx-cursor: hand;" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

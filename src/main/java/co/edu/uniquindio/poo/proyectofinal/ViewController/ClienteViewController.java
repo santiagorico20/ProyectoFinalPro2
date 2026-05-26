@@ -2,10 +2,7 @@ package co.edu.uniquindio.poo.proyectofinal.ViewController;
 
 import co.edu.uniquindio.poo.proyectofinal.Controller.TaquillaVirtualFacade;
 import co.edu.uniquindio.poo.proyectofinal.Model.*;
-import co.edu.uniquindio.poo.proyectofinal.Model.Strategy.IPagoStrategy; // 🔥 Importación de tu interfaz Strategy
-// Nota: Asegúrate de importar tus implementaciones concretas de Strategy, por ejemplo:
-// import co.edu.uniquindio.poo.proyectofinal.Model.Strategy.TarjetaStrategy;
-// import co.edu.uniquindio.poo.proyectofinal.Model.Strategy.TransferenciaStrategy;
+import co.edu.uniquindio.poo.proyectofinal.Model.Strategy.IPagoStrategy;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -81,13 +78,11 @@ public class ClienteViewController {
 
             String estado = asiento.getNombreEstado().toUpperCase();
 
-            // Si el cliente ya seleccionó la silla localmente, se pinta azul (Carrito)
             if (carritoCompras.contains(asiento)) {
                 btnSilla.setStyle("-fx-background-color: #1f6feb; -fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;");
             } else if (estado.equals("DISPONIBLE")) {
                 btnSilla.setStyle("-fx-background-color: #2ea043; -fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;");
             } else {
-                // Sillas ocupadas o reservadas por otros se deshabilitan y van a rojo
                 btnSilla.setStyle("-fx-background-color: #f85149; -fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-opacity: 0.4;");
                 btnSilla.setDisable(true);
             }
@@ -130,57 +125,40 @@ public class ClienteViewController {
             return;
         }
 
-        // ✨ SOLUCIÓN AL ERROR: Instanciamos tu objeto Compra con tus 3 argumentos exactos del modelo
         String idUnicoCompra = "COM-" + UUID.randomUUID().toString().substring(0, 5).toUpperCase();
         LocalDate fechaHoy = LocalDate.now();
 
         Compra nuevaCompra = new Compra(idUnicoCompra, fechaHoy, usuarioActual);
 
-        // 🎟️ Construcción de las Entradas para la compra basándonos en los asientos del carrito
         for (Asiento a : carritoCompras) {
-            // Suponiendo que tu constructor de Entrada pide el ID, el precio, el asiento y el evento:
-            // Entrada entrada = new Entrada("ENT-" + UUID.randomUUID().toString().substring(0,5), zonaSeleccionada.getPrecioBase(), a, eventoSeleccionado);
-            // nuevaCompra.agregarEntrada(entrada);
-
-            // Para mantener el flujo del estado visual del mapa:
             a.ocupar();
         }
 
-        // 🔄 INYECCIÓN DINÁMICA DEL PATRÓN STRATEGY
         IPagoStrategy estrategiaSeleccionada = null;
 
         if (opcionPago.contains("Tarjeta")) {
-            // Reemplaza 'TarjetaStrategy' por el nombre exacto de tu clase concreta
             // estrategiaSeleccionada = new TarjetaStrategy();
         } else if (opcionPago.contains("Transferencia")) {
-            // Reemplaza 'TransferenciaStrategy' por el nombre exacto de tu clase concreta
             // estrategiaSeleccionada = new TransferenciaStrategy();
         }
 
-        // Simulador de fallback en caso de que no tengas las clases de estrategia creadas todavía
         if (estrategiaSeleccionada == null) {
-            // Estrategia anónima temporal de respaldo para evitar NullPointerException si no están listas las clases
             estrategiaSeleccionada = (monto) -> true;
         }
 
-        // Pasamos la estrategia elegida a tu modelo Compra
         nuevaCompra.setMetodoPago(estrategiaSeleccionada);
-
-        // 🔥 Ejecutamos la lógica estratégica que creaste en tu modelo
         boolean transaccionExitosa = nuevaCompra.procesarPagoConEstrategia();
 
         if (transaccionExitosa) {
-            // Si la pasarela aprueba, vinculamos la compra al historial del usuario
             usuarioActual.getHistorialCompras().add(nuevaCompra);
 
-            mostrarAlerta("¡Pago Exitoso!", "Tu pago a través de '" + opcionPago + "' fue procesado correctamente.\n¡Disfruta el evento!", Alert.AlertType.INFORMATION);
+            mostrarAlerta("¡Pago Exitoso!", "Tu pago a través de '" + opcionPago + "' fue processed correctamente.\n¡Disfruta el evento!", Alert.AlertType.INFORMATION);
 
             carritoCompras.clear();
             actualizarCarrito();
             cargarMapaCliente();
         } else {
-            // Si falla la transacción, liberamos los asientos locales del carrito para que reintenten
-            mostrarAlerta("Transacción Rechazada", "La pasarela de pago rechazó la operación. Intente con otro método.", Alert.AlertType.ERROR);
+            mostrarAlerta("Transacción Temporarily Rechazada", "La pasarela de pago rechazó la operación. Intente con otro método.", Alert.AlertType.ERROR);
         }
     }
 
@@ -193,7 +171,7 @@ public class ClienteViewController {
             }
 
             mostrarAlerta("Notificaciones del Sistema", mensajeAlerta.toString(), Alert.AlertType.WARNING);
-            actual.limpiarNotificaciones(); // Se limpian los mensajes una vez leídos
+            actual.limpiarNotificaciones();
         }
     }
 

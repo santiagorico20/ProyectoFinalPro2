@@ -7,6 +7,7 @@ import java.util.List;
  * ENTIDAD: Representa al consumidor final con pasarela simulación y su historial.
  */
 public class Cliente extends Usuario {
+    private static final long serialVersionUID = 1L;
 
     private String telefono; // 🎯 Atributo propio que requiere el cliente
     private List<String> metodosPagoSimulados;

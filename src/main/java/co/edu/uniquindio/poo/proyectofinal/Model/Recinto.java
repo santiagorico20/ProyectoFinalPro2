@@ -8,6 +8,7 @@ import java.util.List;
  * ENTIDAD: El lugar físico que aloja el evento y contiene múltiples zonas.
  */
 public class Recinto implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String idRecinto;
     private String nombre;
     private String direccion;

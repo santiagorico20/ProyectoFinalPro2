@@ -9,7 +9,12 @@
             <children>
 
                 <VBox spacing="15.0" HBox.hgrow="ALWAYS">
-                    <Label text="🎟️ Compra de Entradas" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #58a6ff;" />
+
+                    <HBox alignment="CENTER_LEFT">
+                        <children>
+                            <Label text="🎟️ Compra de Entradas" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #58a6ff;" />
+                        </children>
+                    </HBox>
 
                     <HBox spacing="15.0">
                         <VBox spacing="5.0"><Label text="1. Elige un Evento:" style="-fx-text-fill: #c9d1d9;"/><ComboBox fx:id="comboEventos" prefWidth="200.0"/></VBox>

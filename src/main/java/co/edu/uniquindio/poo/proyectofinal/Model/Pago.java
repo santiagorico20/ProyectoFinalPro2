@@ -1,8 +1,11 @@
 package co.edu.uniquindio.poo.proyectofinal.Model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Pago {
+public class Pago implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String idPago;
     private double monto;
     private LocalDate fechaPago;

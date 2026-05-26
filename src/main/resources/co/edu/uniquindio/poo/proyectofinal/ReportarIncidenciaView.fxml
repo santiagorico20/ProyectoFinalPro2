@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #0d1117;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://fxml.com/fxml/1" fx:controller="co.edu.uniquindio.poo.proyectofinal.ViewController.ReportarIncidenciaViewController">
+    <children>
+        <VBox spacing="15.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+            <children>
+                <Label text="📢 Reportar Incidencia / Problema" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #58a6ff;" />
+                <Label text="Cuéntanos qué inconveniente tuviste con la plataforma o tu compra:" style="-fx-text-fill: #8b949e;" wrapText="true" />
+
+                <Separator style="-fx-opacity: 0.1;" />
+
+                <VBox spacing="5.0">
+                    <Label text="Asunto o Título:" style="-fx-text-fill: #c9d1d9;" />
+                    <TextField fx:id="txtAsunto" style="-fx-background-color: #161b22; -fx-text-fill: white; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-background-radius: 6;" prefHeight="35.0" />
+                </VBox>
+
+                <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+                    <Label text="Descripción detallada del problema:" style="-fx-text-fill: #c9d1d9;" />
+                    <TextArea fx:id="txtDescripcion" style="-fx-control-inner-background: #161b22; -fx-text-fill: white; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-background-radius: 6;" VBox.vgrow="ALWAYS" wrapText="true" />
+                </VBox>
+
+                <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                    <children>
+                        <Button onAction="#regresar" text="Cancelar" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #21262d; -fx-text-fill: #c9d1d9; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-cursor: hand;" />
+                        <Button onAction="#enviarIncidencia" text="Enviar Reporte" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #2ea043; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 6; -fx-background-radius: 6; -fx-cursor: hand;" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

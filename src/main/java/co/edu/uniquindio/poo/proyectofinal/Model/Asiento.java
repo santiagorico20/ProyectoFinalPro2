@@ -6,6 +6,7 @@ import java.io.Serializable;
  * ENTIDAD: Representa un asiento físico en una zona numerada.
  */
 public class Asiento implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String codigo; // Ej: "A-12"
     private int fila;
     private int numero;

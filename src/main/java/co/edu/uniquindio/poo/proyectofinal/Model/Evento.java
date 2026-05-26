@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
  * ENTIDAD: Actividad programada. Usa el Patrón State para manejar su ciclo de vida.
  */
 public class Evento implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String idEvento;
     private String nombre;
     private String descripcion;

@@ -21,6 +21,8 @@ import javafx.util.Duration;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminViewController {
 
@@ -353,9 +355,6 @@ public class AdminViewController {
         }
     }
 
-    /**
-     * Hace que las tarjetas emerjan con una escala y opacidad sutil combinadas.
-     */
     private void aplicarEfectoPopIn(Node nodo, double retrasoMilisegundos) {
         if (nodo == null) return;
 
@@ -375,9 +374,6 @@ public class AdminViewController {
         pt.play();
     }
 
-    /**
-     * Transición suave de visibilidad para los gráficos pesados.
-     */
     private void aplicarEfectoFade(Node nodo, double retrasoMilisegundos) {
         if (nodo == null) return;
         nodo.setOpacity(0.0);
@@ -385,6 +381,102 @@ public class AdminViewController {
         ft.setToValue(1.0);
         ft.setDelay(Duration.millis(retrasoMilisegundos));
         ft.play();
+    }
+
+    // ==========================================
+    // 🔥 SECCIÓN: ELIMINAR REGISTROS (CRUD)
+    // ==========================================
+
+    @FXML
+    public void eliminarUsuario() {
+        Usuario seleccionado = tablaUsuarios.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            // 🛡️ Impedir que el admin se borre a sí mismo por accidente
+            if (facade.getUsuarioAutenticado() != null && seleccionado.getIdUsuario().equals(facade.getUsuarioAutenticado().getIdUsuario())) {
+                mostrarAlerta("Error", "No puedes eliminar tu propio usuario mientras estás en sesión.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            facade.getUsuarios().remove(seleccionado);
+            facade.resguardarEstado(); // Persistencia instantánea
+
+            tablaUsuarios.setItems(FXCollections.observableArrayList(facade.getUsuarios()));
+            mostrarAlerta("Éxito", "Usuario eliminado correctamente.", Alert.AlertType.INFORMATION);
+        } else {
+            mostrarAlerta("Atención", "Selecciona un usuario de la tabla para eliminar.", Alert.AlertType.WARNING);
+        }
+    }
+
+    @FXML
+    public void eliminarEvento() {
+        Evento seleccionado = tablaEventos.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            facade.getEventos().remove(seleccionado);
+            facade.resguardarEstado(); // Persistencia instantánea
+
+            actualizarTablaEventos();
+            mostrarAlerta("Éxito", "Evento eliminado correctamente.", Alert.AlertType.INFORMATION);
+        } else {
+            mostrarAlerta("Atención", "Selecciona un evento de la tabla para eliminar.", Alert.AlertType.WARNING);
+        }
+    }
+
+    @FXML
+    public void eliminarRecinto() {
+        Recinto seleccionado = tablaRecintos.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            // 🛡️ Seguridad: No dejar borrar recintos con eventos activos asignados
+            boolean enUso = facade.getEventos().stream().anyMatch(e -> e.getRecinto().getNombre().equals(seleccionado.getNombre()));
+            if (enUso) {
+                mostrarAlerta("Error", "No puedes eliminar este recinto porque tiene eventos vigentes asociados.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            facade.getRecintos().remove(seleccionado);
+            facade.resguardarEstado(); // Persistencia instantánea
+
+            tablaRecintos.setItems(FXCollections.observableArrayList(facade.getRecintos()));
+            actualizarCombosRecintos();
+            mostrarAlerta("Éxito", "Recinto eliminado correctamente.", Alert.AlertType.INFORMATION);
+        } else {
+            mostrarAlerta("Atención", "Selecciona un recinto de la tabla para eliminar.", Alert.AlertType.WARNING);
+        }
+    }
+
+    @FXML
+    public void eliminarZona() {
+        String nomRecinto = comboRecintoParaZona.getValue();
+        if (nomRecinto == null) {
+            mostrarAlerta("Atención", "Primero selecciona un recinto en el menú desplegable.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        Recinto recinto = facade.getRecintos().stream().filter(r -> r.getNombre().equals(nomRecinto)).findFirst().orElse(null);
+
+        if (recinto != null && !recinto.getZonas().isEmpty()) {
+            List<String> nombresZonas = new ArrayList<>();
+            recinto.getZonas().forEach(z -> nombresZonas.add(z.getNombre()));
+
+            // Cuadro de selección emergente limpio de JavaFX
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(nombresZonas.get(0), nombresZonas);
+            dialog.setTitle("Eliminar Zona");
+            dialog.setHeaderText("Eliminar zona de: " + recinto.getNombre());
+            dialog.setContentText("Selecciona la zona a remover:");
+
+            dialog.showAndWait().ifPresent(nombreZona -> {
+                recinto.getZonas().removeIf(z -> z.getNombre().equals(nombreZona));
+                facade.resguardarEstado(); // Persistencia instantánea
+                mostrarAlerta("Éxito", "Zona '" + nombreZona + "' eliminada del recinto.", Alert.AlertType.INFORMATION);
+            });
+        } else {
+            mostrarAlerta("Atención", "Este recinto no contiene zonas registradas.", Alert.AlertType.WARNING);
+        }
+    }
+
+    // 🎯 NUEVO MÉTODO: Navegación hacia Panel de Incidencias
+    @FXML
+    public void abrirGestionIncidencias() {
+        Navegador.cambiarPantalla("/co/edu/uniquindio/poo/proyectofinal/VerIncidenciasAdminView.fxml", "Panel de Incidencias");
     }
 
     @FXML public void cerrarSesion() { facade.setUsuarioAutenticado(null); Navegador.cambiarPantalla("/co/edu/uniquindio/poo/proyectofinal/LoginView.fxml", "Iniciar Sesión"); }

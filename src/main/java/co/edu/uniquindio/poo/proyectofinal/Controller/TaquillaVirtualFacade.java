@@ -20,12 +20,14 @@ public class TaquillaVirtualFacade implements Serializable {
     private List<Usuario> usuarios;
     private List<Recinto> recintos;
     private List<Evento> eventos;
+    private List<Incidencia> listaIncidencias; // 📝 NUEVO: Lista para guardar quejas
     private Usuario usuarioAutenticado;
 
     private TaquillaVirtualFacade() {
         usuarios = new ArrayList<>();
         recintos = new ArrayList<>();
         eventos = new ArrayList<>();
+        listaIncidencias = new ArrayList<>(); // 📝 NUEVO: Inicializamos la lista vacía
     }
 
     public static TaquillaVirtualFacade getInstancia() {
@@ -90,10 +92,38 @@ public class TaquillaVirtualFacade implements Serializable {
         return this.usuarios;
     }
 
+    // ============================================================
+    // 📝 GESTIÓN DE INCIDENCIAS
+    // ============================================================
+
+    /**
+     * Guarda una nueva incidencia en el sistema
+     */
+    public void registrarIncidencia(Incidencia incidencia) {
+        if (listaIncidencias == null) {
+            listaIncidencias = new ArrayList<>();
+        }
+        listaIncidencias.add(incidencia);
+
+        // Guardamos automáticamente en el archivo cada vez que entra una queja
+        resguardarEstado();
+    }
+
+    /**
+     * Devuelve la lista completa de incidencias para que el Admin las vea
+     */
+    public List<Incidencia> getListaIncidencias() {
+        if (listaIncidencias == null) {
+            listaIncidencias = new ArrayList<>();
+        }
+        return listaIncidencias;
+    }
+
     // --- GETTERS Y SETTERS ---
     public List<Usuario> getUsuarios() { return usuarios; }
     public List<Recinto> getRecintos() { return recintos; }
     public List<Evento> getEventos() { return eventos; }
     public Usuario getUsuarioAutenticado() { return usuarioAutenticado; }
     public void setUsuarioAutenticado(Usuario usuario) { this.usuarioAutenticado = usuario; }
+
 }

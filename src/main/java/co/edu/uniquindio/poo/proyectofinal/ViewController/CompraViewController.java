@@ -142,6 +142,12 @@ public class CompraViewController {
         Navegador.cambiarPantalla("/co/edu/uniquindio/poo/proyectofinal/LoginView.fxml", "Iniciar Sesión");
     }
 
+    // 📢 NUEVO MÉTODO PARA ABRIR LA PANTALLA DE INCIDENCIAS
+    @FXML
+    public void abrirReportarIncidencia() {
+        Navegador.cambiarPantalla("/co/edu/uniquindio/poo/proyectofinal/ReportarIncidenciaView.fxml", "Reportar un Problema");
+    }
+
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);

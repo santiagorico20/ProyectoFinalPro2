@@ -26,6 +26,7 @@
                                 <Button mnemonicParsing="false" onAction="#mostrarPanelAsientos" text="💺 Mapa de Asientos" prefHeight="40.0" prefWidth="220.0" styleClass="button-sidebar" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 15;" />
                                 <Button mnemonicParsing="false" onAction="#mostrarPanelUsuarios" text="👥 Lista de Usuarios" prefHeight="40.0" prefWidth="220.0" styleClass="button-sidebar" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 15;" />
                                 <Button mnemonicParsing="false" onAction="#mostrarPanelMetricas" text="📊 Métricas de Ventas" prefHeight="40.0" prefWidth="220.0" styleClass="button-sidebar" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 15;" />
+                                <Button mnemonicParsing="false" onAction="#abrirGestionIncidencias" text="🛠️ Panel de Incidencias" prefHeight="40.0" prefWidth="220.0" styleClass="button-sidebar" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 15;" />
                             </children>
                         </VBox>
                         <Button mnemonicParsing="false" onAction="#cerrarSesion" text="🚪 Cerrar Sesión" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #ff4d4f; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 6;" />
@@ -53,7 +54,7 @@
                                                 <VBox spacing="5.0" HBox.hgrow="ALWAYS"><Label text="Descripción" style="-fx-text-fill: #434343;"/><TextField fx:id="txtDescEvento"/></VBox>
                                                 <VBox spacing="5.0"><Label text="Fecha" style="-fx-text-fill: #434343;"/><DatePicker fx:id="dpFechaEvento" prefWidth="130.0"/></VBox>
                                                 <VBox spacing="5.0"><Label text="Recinto" style="-fx-text-fill: #434343;"/><ComboBox fx:id="comboRecintoEvento" prefWidth="130.0"/></VBox>
-                                                <Button onAction="#crearEvento" text="➕ Crear" prefHeight="35.0" prefWidth="90.0" style="-fx-background-color: #52c41a; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;"/>
+                                                <Button onAction="#crearEvento" text="➕ Crear" prefHeight="35.0" prefWidth="90.0" style="-fx-background-color: #52c41a; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;"/>
                                             </children>
                                         </HBox>
                                         <TableView fx:id="tablaEventos" VBox.vgrow="ALWAYS" prefHeight="300.0">
@@ -66,8 +67,11 @@
                                             </columns>
                                         </TableView>
                                         <HBox spacing="15.0" alignment="CENTER_RIGHT">
-                                            <Button onAction="#cancelarEventoSeleccionado" text="🚫 Cancelar" prefHeight="35.0" style="-fx-background-color: #ff4d4f; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" />
-                                            <Button onAction="#publicarEventoSeleccionado" text="🚀 Publicar" prefHeight="35.0" style="-fx-background-color: #1890ff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" />
+                                            <children>
+                                                <Button onAction="#eliminarEvento" text="🗑️ Eliminar" prefHeight="35.0" style="-fx-background-color: #8c8c8c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;" />
+                                                <Button onAction="#cancelarEventoSeleccionado" text="🚫 Cancelar" prefHeight="35.0" style="-fx-background-color: #ff4d4f; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;" />
+                                                <Button onAction="#publicarEventoSeleccionado" text="🚀 Publicar" prefHeight="35.0" style="-fx-background-color: #1890ff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;" />
+                                            </children>
                                         </HBox>
                                     </children>
                                 </VBox>
@@ -80,7 +84,7 @@
                                                 <VBox spacing="5.0" HBox.hgrow="ALWAYS"><Label text="Nombre del Recinto" style="-fx-text-fill: #434343;"/><TextField fx:id="txtNombreRecinto" promptText="Ej: Movistar Arena" /></VBox>
                                                 <VBox spacing="5.0" HBox.hgrow="ALWAYS"><Label text="Ciudad" style="-fx-text-fill: #434343;"/><TextField fx:id="txtCiudadRecinto" promptText="Ej: Bogotá" /></VBox>
                                                 <VBox spacing="5.0" HBox.hgrow="ALWAYS"><Label text="Dirección" style="-fx-text-fill: #434343;"/><TextField fx:id="txtDireccionRecinto" promptText="Ej: Carrera 30" /></VBox>
-                                                <Button onAction="#crearRecinto" text="🏗️ Guardar Edificio" prefHeight="35.0" style="-fx-background-color: #52c41a; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;"/>
+                                                <Button onAction="#crearRecinto" text="🏗️ Guardar Edificio" prefHeight="35.0" style="-fx-background-color: #52c41a; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;"/>
                                             </children>
                                         </HBox>
 
@@ -92,7 +96,7 @@
                                                 <VBox spacing="5.0"><Label text="Capacidad" style="-fx-text-fill: #434343;"/><TextField fx:id="txtCapacidadZona" prefWidth="90.0" promptText="Ej: 100" /></VBox>
                                                 <VBox spacing="5.0"><Label text="Precio $" style="-fx-text-fill: #434343;"/><TextField fx:id="txtPrecioZona" prefWidth="110.0" promptText="Ej: 50000" /></VBox>
                                                 <VBox alignment="CENTER" spacing="5.0"><Label text="Numerada" style="-fx-text-fill: #434343;"/><CheckBox fx:id="chkEsNumerada" selected="true" /></VBox>
-                                                <Button onAction="#crearZonaParaRecinto" text="💺 Añadir Zona" prefHeight="35.0" style="-fx-background-color: #1890ff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;"/>
+                                                <Button onAction="#crearZonaParaRecinto" text="💺 Añadir Zona" prefHeight="35.0" style="-fx-background-color: #1890ff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;"/>
                                             </children>
                                         </HBox>
 
@@ -104,6 +108,12 @@
                                                 <TableColumn fx:id="colRecintoDireccion" prefWidth="200.0" text="Dirección" />
                                             </columns>
                                         </TableView>
+                                        <HBox spacing="15.0" alignment="CENTER_RIGHT">
+                                            <children>
+                                                <Button onAction="#eliminarZona" text="🗑️ Eliminar Zona..." prefHeight="35.0" style="-fx-background-color: #fa8c16; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;" />
+                                                <Button onAction="#eliminarRecinto" text="❌ Eliminar Recinto" prefHeight="35.0" style="-fx-background-color: #ff4d4f; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;" />
+                                            </children>
+                                        </HBox>
                                     </children>
                                 </VBox>
 
@@ -114,7 +124,7 @@
                                             <children>
                                                 <VBox spacing="5.0"><Label text="Recinto:" style="-fx-text-fill: #434343;"/><ComboBox fx:id="comboRecintoAsientos" prefWidth="180.0" /></VBox>
                                                 <VBox spacing="5.0"><Label text="Zona Numerada:" style="-fx-text-fill: #434343;"/><ComboBox fx:id="comboZonaAsientos" prefWidth="180.0" /></VBox>
-                                                <Button onAction="#cargarMapaAsientos" text="🔍 Dibujar Sillas" prefHeight="35.0" style="-fx-background-color: #1890ff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" />
+                                                <Button onAction="#cargarMapaAsientos" text="🔍 Dibujar Sillas" prefHeight="35.0" style="-fx-background-color: #1890ff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;" />
                                             </children>
                                         </HBox>
 
@@ -135,15 +145,22 @@
                                 </VBox>
 
                                 <VBox fx:id="panelUsuarios" spacing="20.0" visible="false">
-                                    <Label text="Usuarios Registrados" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #096dd9;" />
-                                    <TableView fx:id="tablaUsuarios" VBox.vgrow="ALWAYS">
-                                        <columns>
-                                            <TableColumn fx:id="colUsuarioId" prefWidth="140.0" text="Identificación" />
-                                            <TableColumn fx:id="colUsuarioNombre" prefWidth="220.0" text="Nombre de Usuario" />
-                                            <TableColumn fx:id="colUsuarioCorreo" prefWidth="230.0" text="Correo Electrónico" />
-                                            <TableColumn fx:id="colUsuarioRol" prefWidth="130.0" text="Rol de Sistema" />
-                                        </columns>
-                                    </TableView>
+                                    <children>
+                                        <Label text="Usuarios Registrados" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #096dd9;" />
+                                        <TableView fx:id="tablaUsuarios" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="colUsuarioId" prefWidth="140.0" text="Identificación" />
+                                                <TableColumn fx:id="colUsuarioNombre" prefWidth="220.0" text="Nombre de Usuario" />
+                                                <TableColumn fx:id="colUsuarioCorreo" prefWidth="230.0" text="Correo Electrónico" />
+                                                <TableColumn fx:id="colUsuarioRol" prefWidth="130.0" text="Rol de Sistema" />
+                                            </columns>
+                                        </TableView>
+                                        <HBox spacing="15.0" alignment="CENTER_RIGHT">
+                                            <children>
+                                                <Button onAction="#eliminarUsuario" text="❌ Eliminar Usuario" prefHeight="35.0" style="-fx-background-color: #ff4d4f; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;" />
+                                            </children>
+                                        </HBox>
+                                    </children>
                                 </VBox>
 
                                 <VBox fx:id="panelMetricas" spacing="25.0" visible="false">
