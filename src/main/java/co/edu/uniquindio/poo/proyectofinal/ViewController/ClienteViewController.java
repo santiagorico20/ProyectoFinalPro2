@@ -1,8 +1,10 @@
 package co.edu.uniquindio.poo.proyectofinal.ViewController;
 
 import co.edu.uniquindio.poo.proyectofinal.Controller.TaquillaVirtualFacade;
+import co.edu.uniquindio.poo.proyectofinal.Controller.Persistencia;
 import co.edu.uniquindio.poo.proyectofinal.Model.*;
 import co.edu.uniquindio.poo.proyectofinal.Model.Strategy.IPagoStrategy;
+import co.edu.uniquindio.poo.proyectofinal.Navegador;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -56,9 +58,6 @@ public class ClienteViewController {
                 "💳 Tarjeta de Crédito/Débito",
                 "🏦 Transferencia Bancaria (PSE)"
         ));
-
-        // Revisar si el administrador le canceló algo mientras no estaba
-        revisarNotificaciones();
     }
 
     private void cargarMapaCliente() {
@@ -152,26 +151,16 @@ public class ClienteViewController {
         if (transaccionExitosa) {
             usuarioActual.getHistorialCompras().add(nuevaCompra);
 
-            mostrarAlerta("¡Pago Exitoso!", "Tu pago a través de '" + opcionPago + "' fue processed correctamente.\n¡Disfruta el evento!", Alert.AlertType.INFORMATION);
+            // Guardamos el estado usando tu método de fachada
+            facade.resguardarEstado();
+
+            mostrarAlerta("¡Pago Exitoso!", "Tu pago a través de '" + opcionPago + "' fue procesado correctamente.\n¡Disfruta el evento!", Alert.AlertType.INFORMATION);
 
             carritoCompras.clear();
             actualizarCarrito();
             cargarMapaCliente();
         } else {
-            mostrarAlerta("Transacción Temporarily Rechazada", "La pasarela de pago rechazó la operación. Intente con otro método.", Alert.AlertType.ERROR);
-        }
-    }
-
-    private void revisarNotificaciones() {
-        Usuario actual = facade.getUsuarioAutenticado();
-        if (actual != null && actual.getNotificaciones() != null && !actual.getNotificaciones().isEmpty()) {
-            StringBuilder mensajeAlerta = new StringBuilder("⚠️ AVISO IMPORTANTE DE LA ADMINISTRACIÓN:\n\n");
-            for (String notificacion : actual.getNotificaciones()) {
-                mensajeAlerta.append("• ").append(notificacion).append("\n\n");
-            }
-
-            mostrarAlerta("Notificaciones del Sistema", mensajeAlerta.toString(), Alert.AlertType.WARNING);
-            actual.limpiarNotificaciones();
+            mostrarAlerta("Transacción Cancelada", "La pasarela de pago rechazó la operación. Intente con otro método.", Alert.AlertType.ERROR);
         }
     }
 

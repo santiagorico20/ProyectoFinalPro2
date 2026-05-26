@@ -1,6 +1,5 @@
 package co.edu.uniquindio.poo.proyectofinal.ViewController;
 
-import co.edu.uniquindio.poo.proyectofinal.Controller.Persistencia;
 import co.edu.uniquindio.poo.proyectofinal.Controller.TaquillaVirtualFacade;
 import co.edu.uniquindio.poo.proyectofinal.Model.Usuario;
 import co.edu.uniquindio.poo.proyectofinal.Navegador;
@@ -13,67 +12,76 @@ public class PerfilViewController {
 
     @FXML private TextField txtNombre;
     @FXML private TextField txtCorreo;
+    @FXML private TextField txtTelefono;
     @FXML private PasswordField txtPassword;
 
-    private TaquillaVirtualFacade sistema = TaquillaVirtualFacade.getInstancia();
-    private Usuario usuarioLogueado;
+    private final TaquillaVirtualFacade facade = TaquillaVirtualFacade.getInstancia();
+    private Usuario usuarioActual;
 
     @FXML
     public void initialize() {
-        // 1. Obtenemos el usuario que está usando la app actualmente
-        usuarioLogueado = sistema.getUsuarioLogueado();
+        // Extraemos el usuario que tiene la sesión activa usando tu método real
+        usuarioActual = facade.getUsuarioAutenticado();
 
-        if (usuarioLogueado != null) {
-            // 2. Llenamos los campos de la interfaz con sus datos actuales
-            txtNombre.setText(usuarioLogueado.getNombre());
-            txtCorreo.setText(usuarioLogueado.getCorreo());
-            txtPassword.setText(usuarioLogueado.getPassword());
+        if (usuarioActual != null) {
+            // Llenamos los campos con la información actual del usuario
+            txtNombre.setText(usuarioActual.getNombre());
+            txtCorreo.setText(usuarioActual.getCorreo());
+            txtTelefono.setText(usuarioActual.getTelefono());
+            txtPassword.setText(usuarioActual.getContrasena()); // Tu atributo se llama getContrasena()
 
-            // Opcional: Bloqueamos el correo para que no lo cambie si es su ID de login
+            // Bloqueamos el correo para que no lo altere (suele ser el ID de inicio de sesión)
             txtCorreo.setEditable(false);
         } else {
-            mostrarAlerta("Error", "No hay ninguna sesión activa.", Alert.AlertType.ERROR);
+            mostrarAlerta("Error de Sesión", "No se encontró ningún usuario autenticado.", Alert.AlertType.ERROR);
         }
     }
 
     @FXML
     void guardarCambios() {
-        if (usuarioLogueado == null) return;
+        if (usuarioActual == null) return;
 
-        // 1. Validar que los campos no estén vacíos
         String nuevoNombre = txtNombre.getText().trim();
+        String nuevoTelefono = txtTelefono.getText().trim();
         String nuevaPassword = txtPassword.getText().trim();
 
-        if (nuevoNombre.isEmpty() || nuevaPassword.isEmpty()) {
-            mostrarAlerta("Campos Vacíos", "Por favor llena todos los campos.", Alert.AlertType.WARNING);
+        if (nuevoNombre.isEmpty() || nuevoTelefono.isEmpty() || nuevaPassword.isEmpty()) {
+            mostrarAlerta("Campos Vacíos", "Por favor, completa todos los campos editables.", Alert.AlertType.WARNING);
             return;
         }
 
-        // 2. Modificar los datos del objeto que está en la memoria del Singleton
-        usuarioLogueado.setNombre(nuevoNombre);
-        usuarioLogueado.setPassword(nuevaPassword);
+        // ✅ CORREGIDO: Descomentados y aplicados los cambios reales al objeto usuario en memoria
+        usuarioActual.setNombre(nuevoNombre);
+        usuarioActual.setTelefono(nuevoTelefono);
+        usuarioActual.setContrasena(nuevaPassword);
 
-        // 3. 🔥 EL PASO MAESTRO: Guardar inmediatamente en el archivo binario
-        Persistencia.guardarSistema(sistema);
+        // 🔥 CONGELAMOS EN EL DISCO AUTOMÁTICAMENTE
+        facade.resguardarEstado();
 
-        mostrarAlerta("Éxito", "Perfil actualizado correctamente de forma permanente.", Alert.AlertType.INFORMATION);
+        mostrarAlerta("Éxito", "Tu perfil ha sido actualizado de forma permanente.", Alert.AlertType.INFORMATION);
     }
 
     @FXML
     void volver() {
-        // Redirecciona según el rol para que no se pierda
-        if (usuarioLogueado != null && "ADMIN".equals(usuarioLogueado.getRol())) {
+        if (usuarioActual == null) {
+            Navegador.cambiarPantalla("/co/edu/uniquindio/poo/proyectofinal/LoginView.fxml", "Nexus Tickets - Iniciar Sesión");
+            return;
+        }
+
+        // ✅ CORREGIDO: Redirección inteligente al lugar exacto de donde vino
+        if ("ADMIN".equals(usuarioActual.getRol())) {
             Navegador.cambiarPantalla("/co/edu/uniquindio/poo/proyectofinal/AdminView.fxml", "Panel de Administrador");
         } else {
-            Navegador.cambiarPantalla("/co/edu/uniquindio/poo/proyectofinal/ClienteView.fxml", "Panel de Cliente");
+            // Te regresa limpiamente a la Cartelera Negra de eventos, no al mapa de asientos
+            Navegador.cambiarPantalla("/co/edu/uniquindio/poo/proyectofinal/CompraView.fxml", "Nexus Tickets - Cartelera de Eventos");
         }
     }
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
-        alerta.setContentText(mensaje);
         alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
 }

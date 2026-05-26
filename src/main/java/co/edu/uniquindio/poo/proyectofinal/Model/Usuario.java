@@ -74,18 +74,30 @@ public class Usuario implements Serializable {
     public void agregarNotificacion(String mensaje) { this.getNotificaciones().add(mensaje); }
     public void limpiarNotificaciones() { this.getNotificaciones().clear(); }
 
-    // --- GETTERS Y SETTERS BÁSICOS ---
+    // --- GETTERS BÁSICOS ---
     public String getIdUsuario() { return idUsuario; }
     public String getNombre() { return nombre; }
     public String getCorreo() { return correo; }
     public String getContrasena() { return contrasena; }
     public String getRol() { return rol; }
-
     public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
 
     public List<Compra> getHistorialCompras() {
         if (historialCompras == null) historialCompras = new ArrayList<>();
         return historialCompras;
+    }
+
+    // --- SETTERS COMPLETO PARA GESTIONAR PERFIL ---
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 }

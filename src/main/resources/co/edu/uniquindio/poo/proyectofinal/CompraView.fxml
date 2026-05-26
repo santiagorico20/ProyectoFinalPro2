@@ -11,7 +11,8 @@
             <children>
                 <Label text="🎟️ Nexus Tickets" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #58a6ff;" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Label fx:id="lblSaludoUsuario" text="Sesión activa: Cliente" style="-fx-text-fill: #c9d1d9; -fx-font-weight: bold;" />
+
+                <Hyperlink fx:id="lblSaludoUsuario" onAction="#irAGestionarPerfil" style="-fx-text-fill: #c9d1d9; -fx-font-weight: bold; -fx-underline: false; -fx-border-color: transparent;" text="Sesión activa: Cliente (Editar Perfil 👤)" />
 
                 <Button mnemonicParsing="false" onAction="#abrirReportarIncidencia" text="📢 Reportar Problema" style="-fx-background-color: #d73a49; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" />
 

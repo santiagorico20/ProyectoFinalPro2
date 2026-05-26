@@ -22,7 +22,8 @@ import java.util.stream.Collectors;
 
 public class CompraViewController {
 
-    @FXML private Label lblSaludoUsuario;
+    // 🔥 CAMBIO DE ELEMENTO VISUAL: De Label a Hyperlink para que sea cliqueable
+    @FXML private Hyperlink lblSaludoUsuario;
     @FXML private TextField txtBuscarEvento;
     @FXML private ComboBox<String> comboCategoria;
 
@@ -39,7 +40,8 @@ public class CompraViewController {
         comboCategoria.setValue("Todos"); // Valor por defecto
 
         if (facade.getUsuarioAutenticado() != null) {
-            lblSaludoUsuario.setText("Sesión activa: " + facade.getUsuarioAutenticado().getNombre());
+            // 🔥 Ajustamos el texto para invitar al usuario a dar clic y gestionar su perfil
+            lblSaludoUsuario.setText("Sesión activa: " + facade.getUsuarioAutenticado().getNombre() + " (Editar Perfil 👤)");
         }
 
         // Configuración de columnas
@@ -129,6 +131,12 @@ public class CompraViewController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // 📢 NUEVO MÉTODO CONECTADO AL TEXTO DE SESIÓN ACTIVA
+    @FXML
+    public void irAGestionarPerfil() {
+        Navegador.cambiarPantalla("/co/edu/uniquindio/poo/proyectofinal/PerfilView.fxml", "Nexus Tickets - Gestionar Mi Perfil");
     }
 
     @FXML
