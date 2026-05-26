@@ -4,8 +4,11 @@ import co.edu.uniquindio.poo.proyectofinal.Controller.TaquillaVirtualFacade;
 import co.edu.uniquindio.poo.proyectofinal.Model.*;
 import co.edu.uniquindio.poo.proyectofinal.Navegador;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -17,25 +20,57 @@ public class DetalleCompraViewController {
     @FXML private GridPane gridAsientosCliente;
     @FXML private Button btnProcederPago;
 
+    // Los CheckBoxes que el cliente va a marcar
+    private CheckBox chkSeguro;
+    private CheckBox chkKitRegalo;
+
     private final TaquillaVirtualFacade facade = TaquillaVirtualFacade.getInstancia();
     private Evento eventoActual;
     private Asiento asientoEscogido;
     private Zona zonaSeleccionada;
 
-    // Método para inyectar el evento seleccionado desde la cartelera
+    // Precios de los servicios adicionales
+    private final double PRECIO_SEGURO = 15000.0;
+    private final double PRECIO_KIT = 35000.0;
+
     public void setEvento(Evento evento) {
         this.eventoActual = evento;
         lblNombreEvento.setText(evento.getNombre());
         lblDetalleRecinto.setText(evento.getRecinto().getNombre() + " (" + evento.getRecinto().getCiudad() + ")");
 
-        // Cargar las zonas disponibles en el combo
         comboZonas.getItems().clear();
         evento.getRecinto().getZonas().forEach(z -> comboZonas.getItems().add(z.getNombre()));
     }
 
     @FXML
     public void initialize() {
-        // Listener: Al cambiar de localidad, redibujamos el mapa de esa zona
+        // 🎯 CREACIÓN DINÁMICA: Creamos los CheckBoxes con diseño limpio
+        chkSeguro = new CheckBox("Añadir Seguro de Asistencia Básica (+$15.000)");
+        chkKitRegalo = new CheckBox("Añadir Kit Oficial Merchandising (+$35.000)");
+
+        chkSeguro.setStyle("-fx-font-size: 13px; -fx-text-fill: #333333; -fx-cursor: hand;");
+        chkKitRegalo.setStyle("-fx-font-size: 13px; -fx-text-fill: #333333; -fx-cursor: hand;");
+
+        // 🎯 INYECCIÓN EN LA VISTA: Buscamos el contenedor del botón de pago para meter los CheckBoxes justo encima
+        if (btnProcederPago != null && btnProcederPago.getParent() instanceof Pane) {
+            Pane contenedorPadre = (Pane) btnProcederPago.getParent();
+
+            // Creamos una cajita vertical para ordenar los checkboxes de forma elegante
+            VBox cajaAdicionales = new VBox(10);
+            cajaAdicionales.setPadding(new Insets(10, 0, 15, 0));
+            cajaAdicionales.getChildren().addAll(chkSeguro, chkKitRegalo);
+
+            // Si el contenedor es un VBox o similar, lo añadimos antes del botón de pago
+            if (contenedorPadre instanceof VBox) {
+                int indexBoton = ((VBox) contenedorPadre).getChildren().indexOf(btnProcederPago);
+                ((VBox) contenedorPadre).getChildren().add(indexBoton, cajaAdicionales);
+            } else {
+                // Si es un contenedor plano, lo agregamos al final para que aparezca en pantalla
+                contenedorPadre.getChildren().add(cajaAdicionales);
+            }
+        }
+
+        // Listener: Al cambiar de localidad, se limpia todo y se redibuja el mapa
         comboZonas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             limpiarSeleccion();
             if (newVal != null) {
@@ -44,6 +79,36 @@ public class DetalleCompraViewController {
                 dibujarMapaAsientos();
             }
         });
+
+        // 🎯 LOGICA EN VIVO: Si el cliente interactúa, recalculamos el precio final de inmediato
+        chkSeguro.setOnAction(e -> calcularYMostrarPrecioTotal());
+        chkKitRegalo.setOnAction(e -> calcularYMostrarPrecioTotal());
+    }
+
+    /**
+     * Revisa qué tiene seleccionado el usuario (Asiento + Adicionales) y actualiza el label del precio
+     */
+    private void calcularYMostrarPrecioTotal() {
+        if (zonaSeleccionada == null || asientoEscogido == null) {
+            lblTotalPagar.setText("$ 0.00");
+            return;
+        }
+
+        // Iniciamos con el precio base de la zona del asiento
+        double totalAcumulado = zonaSeleccionada.getPrecioBase();
+
+        // Si marcó el seguro, le sumamos el precio del seguro
+        if (chkSeguro.isSelected()) {
+            totalAcumulado += PRECIO_SEGURO;
+        }
+
+        // Si marcó el kit, le sumamos el precio del kit
+        if (chkKitRegalo.isSelected()) {
+            totalAcumulado += PRECIO_KIT;
+        }
+
+        // Mostramos el resultado final en la interfaz
+        lblTotalPagar.setText("$ " + totalAcumulado);
     }
 
     private void dibujarMapaAsientos() {
@@ -74,10 +139,12 @@ public class DetalleCompraViewController {
                     asientoEscogido.reservar();
 
                     lblAsientoSeleccionado.setText(asiento.getCodigo() + " - " + zonaSeleccionada.getNombre());
-                    lblTotalPagar.setText("$ " + zonaSeleccionada.getPrecioBase());
+
+                    // Calculamos el precio total inmediatamente al tocar el asiento
+                    calcularYMostrarPrecioTotal();
                     btnProcederPago.setDisable(false);
 
-                    dibujarMapaAsientos(); // Refrescar colores
+                    dibujarMapaAsientos(); // Refrescar colores del mapa
                 } else {
                     mostrarAlerta("Asiento no disponible", "Esta silla ya está apartada o vendida.", Alert.AlertType.WARNING);
                 }
@@ -91,44 +158,52 @@ public class DetalleCompraViewController {
     public void procesarPago() {
         if (asientoEscogido == null) return;
 
-        // 1. Cambiar el estado de reservado a OCUPADO utilizando el Patrón State
         asientoEscogido.ocupar();
 
-        // 2. Generar el Ticket (Entrada)
+        // Entrada recibe 4 argumentos (el 4to es el precio base que toma del modelo)
         Entrada nuevoTicket = new Entrada(eventoActual, zonaSeleccionada, asientoEscogido, zonaSeleccionada.getPrecioBase());
 
-        // 3. Guardar el ticket encapsulado en una Compra dentro del historial del usuario logueado
         Usuario usuarioActual = facade.getUsuarioAutenticado();
         if (usuarioActual != null) {
 
-            // Generamos un ID único para la compra con formato CMP-XXXXX
             String idCompra = "CMP-" + UUID.randomUUID().toString().substring(0, 5).toUpperCase();
 
-            // Instanciamos tu clase Compra usando su constructor real
+            // Compra recibe exactamente 3 argumentos tal como lo muestra tu modelo
             Compra nuevaCompra = new Compra(idCompra, LocalDate.now(), usuarioActual);
 
-            // Agregamos la entrada a la lista interna de la compra y recalculamos el total de forma segura
+            // Metemos la entrada obligatoria
             nuevaCompra.agregarEntrada(nuevoTicket);
 
-            // Cambiamos el estado de la compra a CONFIRMADA
-            nuevaCompra.confirmarCompra();
+            // 🎯 ADICIONALES CORREGIDOS: Estructura corregida por ti que ya compila
+            if (chkSeguro.isSelected()) {
+                ServicioAdicional seguro = new ServicioAdicional("SRV-01", "Seguro de Asistencia", "Seguro", PRECIO_SEGURO);
+                nuevaCompra.agregarServicio(seguro);
+            }
+            if (chkKitRegalo.isSelected()) {
+                ServicioAdicional kit = new ServicioAdicional("SRV-02", "Kit Oficial de Regalo", "Kit", PRECIO_KIT);
+                nuevaCompra.agregarServicio(kit);
+            }
 
-            // Añadimos la compra al historial que ahora acepta estrictamente objetos de tipo 'Compra'
+            // Confirmar y guardar en el historial
+            nuevaCompra.confirmarCompra();
             usuarioActual.getHistorialCompras().add(nuevaCompra);
 
-            // Sincronizamos con la lista global de compras de la fachada (si existe en tu fachada)
             if (facade.getListaCompras() != null) {
                 facade.getListaCompras().add(nuevaCompra);
             }
+
+            // Mensaje de éxito detallado con lo que pagó al final
+            mostrarAlerta("¡Compra Exitosa!",
+                    "Tu pago ha sido confirmado.\n\n" +
+                            "🎫 TICKET: " + nuevoTicket.getIdTicket() + "\n" +
+                            "🪑 Asiento: " + asientoEscogido.getCodigo() + "\n" +
+                            "💵 Total Pagado (Con adicionales): $" + nuevaCompra.getTotal() + "\n\n" +
+                            "Puedes ver tus entradas en 'Mis Compras'.", Alert.AlertType.INFORMATION);
         }
 
-        mostrarAlerta("¡Compra Exitosa!",
-                "Tu pago ha sido confirmado.\n\n" +
-                        "🎫 TICKET: " + nuevoTicket.getIdTicket() + "\n" +
-                        "🪑 Asiento: " + asientoEscogido.getCodigo() + "\n\n" +
-                        "Puedes ver tus entradas en 'Mis Compras'.", Alert.AlertType.INFORMATION);
-
-        // 4. Resetear la vista y volver a pintar el mapa
+        // Resetear todo para una nueva compra
+        chkSeguro.setSelected(false);
+        chkKitRegalo.setSelected(false);
         asientoEscogido = null;
         limpiarSeleccion();
         dibujarMapaAsientos();
